@@ -6,58 +6,64 @@ services:
     hostname: zookeeper
     networks:
       clickhouse-network:
-        ipv4_address: 172.23.0.10
+        ipv4_address: 172.35.1.10
+
   clickhouse01:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:19.15.3.6
     container_name: clickhouse01
     hostname: clickhouse01
     networks:
       clickhouse-network:
-        ipv4_address: 172.23.0.11
+        ipv4_address: 172.35.1.11
     ports:
       - "127.0.0.1:8123:8123"
       - "127.0.0.1:9000:9000"
     volumes:
       - ${PWD}/clickhouse01:/etc/clickhouse-server
+      - ${PWD}/data/ch01:/var/lib/clickhouse
     depends_on:
       - zookeeper
   clickhouse02:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:19.15.3.6
     container_name: clickhouse02
     hostname: clickhouse02
     networks:
       clickhouse-network:
-        ipv4_address: 172.23.0.12
+        ipv4_address: 172.35.1.12
     volumes:
       - ${PWD}/clickhouse02:/etc/clickhouse-server
+      - ${PWD}/data/ch02:/var/lib/clickhouse
     depends_on:
       - zookeeper
   clickhouse03:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:19.15.3.6
     container_name: clickhouse03
     hostname: clickhouse03
     networks:
       clickhouse-network:
-        ipv4_address: 172.23.0.13
+        ipv4_address: 172.35.1.13
     volumes:
       - ${PWD}/clickhouse03:/etc/clickhouse-server
+      - ${PWD}/data/ch03:/var/lib/clickhouse
     depends_on:
       - zookeeper
   clickhouse04:
-    image: yandex/clickhouse-server:20.4
+    image: yandex/clickhouse-server:19.15.3.6
     container_name: clickhouse04
     hostname: clickhouse04
     networks:
       clickhouse-network:
-        ipv4_address: 172.23.0.14
+        ipv4_address: 172.35.1.14
     volumes:
       - ${PWD}/clickhouse04:/etc/clickhouse-server
+      - ${PWD}/data/ch04:/var/lib/clickhouse
     depends_on:
       - zookeeper
 
 networks:
   clickhouse-network:
+    driver: bridge
     name: clickhouse-network
     ipam:
       config:
-        - subnet: 172.23.0.0/24
+        - subnet: 172.35.1.0/24
